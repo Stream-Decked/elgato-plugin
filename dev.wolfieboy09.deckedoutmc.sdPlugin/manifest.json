@@ -1,0 +1,71 @@
+{
+	"Name": "DeckedOut MC",
+	"Version": "0.1.0.0",
+	"Author": "Wolfieboy09",
+	"Actions": [
+		{
+			"Name": "Modspace",
+			"UUID": "dev.wolfieboy09.deckedoutmc.modspace",
+			"Icon": "imgs/actions/modspace/icon",
+			"Tooltip": "Bridge to the decked Minecraft instance. Place it on a key, a dial or the touch strip: the client paints the keys and receives every press, turn and tap.",
+			"PropertyInspectorPath": "ui/modspace.html",
+			"Controllers": [
+				"Keypad",
+				"Encoder"
+			],
+			"Encoder": {
+				"Icon": "imgs/actions/modspace/encoder-icon",
+				"TriggerDescription": {
+					"Rotate": "Turn to send a rotation",
+					"Push": "Push to send a press",
+					"Touch": "Tap or hold the touch strip"
+				}
+			},
+			"States": [
+				{
+					"Image": "imgs/actions/modspace/key"
+				}
+			]
+		}
+	],
+	"Category": "StreamDecked",
+	"CategoryIcon": "imgs/plugin/category-icon",
+	"CodePath": "bin/plugin.js",
+	"Description": "Bridges the Minecraft StreamDecked mod to the Stream Deck over a local WebSocket. Place Modspace on keys, dials and the touch strip to give the game buttons it can paint and receive input from.",
+	"Icon": "imgs/plugin/marketplace",
+	"SDKVersion": 2,
+	"Software": {
+		"MinimumVersion": "7.1"
+	},
+	"OS": [
+		{
+			"Platform": "mac",
+			"MinimumVersion": "10.15"
+		},
+		{
+			"Platform": "windows",
+			"MinimumVersion": "10"
+		}
+	],
+	"Nodejs": {
+		"Version": "24",
+		"Debug": "enabled"
+	},
+	"Profiles": [
+		{
+			"Name": "profiles/streamdecked",
+			"DeviceType": 1,
+			"DontAutoSwitchWhenInstalled": true,
+			"Readonly": true,
+			"AutoInstall": false
+		},
+		{
+			"Name": "profiles/streamdecked",
+			"DeviceType": 11,
+			"DontAutoSwitchWhenInstalled": true,
+			"Readonly": true,
+			"AutoInstall": false
+		}
+	],
+	"UUID": "dev.wolfieboy09.deckedoutmc"
+}

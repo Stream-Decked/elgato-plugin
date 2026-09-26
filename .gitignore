@@ -1,0 +1,17 @@
+node_modules/
+
+dev.wolfieboy09.deckedoutmc.sdPlugin/bin/
+dev.wolfieboy09.deckedoutmc.sdPlugin/imgs/
+dev.wolfieboy09.deckedoutmc.sdPlugin/logs/
+
+*.tsbuildinfo
+
+npm-debug.log*
+
+.idea/
+.vscode/
+
+.DS_Store
+Thumbs.db
+
+scripts/

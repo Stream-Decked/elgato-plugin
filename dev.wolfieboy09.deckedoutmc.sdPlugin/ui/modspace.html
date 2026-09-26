@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<script src="https://sdpi-components.dev/releases/v3/sdpi-components.js"></script>
+	</head>
+
+	<body>
+		<sdpi-item label="Bridge">
+			<sdpi-text>
+				Hosts the local bridge the StreamDecked Minecraft client connects to. Place Modspace
+				keys wherever you want the game to paint buttons and hear presses.
+			</sdpi-text>
+		</sdpi-item>
+
+		<sdpi-item label="Server">
+			<sdpi-text id="server-info">Listening on 127.0.0.1:unknown</sdpi-text>
+			<sdpi-text id="token-text">Token: loading...</sdpi-text>
+		</sdpi-item>
+
+		<sdpi-item label="Clients">
+			<sdpi-text id="client-list">No client connected.</sdpi-text>
+		</sdpi-item>
+
+		<sdpi-item label="Decks">
+			<sdpi-text id="deck-list">No deck reported by the app.</sdpi-text>
+		</sdpi-item>
+
+		<sdpi-group>
+			<sdpi-button id="copy-token">Copy token</sdpi-button>
+			<sdpi-button id="refresh">Refresh</sdpi-button>
+			<sdpi-button id="request-surface">Re-request surfaces</sdpi-button>
+		</sdpi-group>
+
+		<script>
+			const { streamDeckClient } = window.SDPIComponents;
+
+			const serverInfo = document.getElementById("server-info");
+			const tokenText = document.getElementById("token-text");
+			const clientList = document.getElementById("client-list");
+			const deckList = document.getElementById("deck-list");
+			const copyButton = document.getElementById("copy-token");
+
+			function missing(value) {
+				return value === undefined || value === null || value === "" ? "-" : value;
+			}
+
+			function render(snapshot) {
+				if (!snapshot) return;
+				serverInfo.textContent = `Listening on 127.0.0.1:${missing(snapshot.port)}`;
+				tokenText.textContent = `Token: ${missing(snapshot.token)}`;
+				copyButton.style.display = snapshot.token ? "" : "none";
+
+				const clients = snapshot.clients ?? [];
+				if (clients.length === 0) {
+					clientList.textContent = "No client connected.";
+				} else {
+					clientList.innerHTML = clients
+						.map((c) => `<div>${escapeHtml(c.name)} (lib ${escapeHtml(c.libVersion)}) - ${c.deckId ? "deck " + escapeHtml(c.deckId) : "queued"}</div>`)
+						.join("");
+				}
+
+				const decks = snapshot.decks ?? [];
+				if (decks.length === 0) {
+					deckList.textContent = "No deck reported by the app.";
+				} else {
+					deckList.innerHTML = decks
+						.map((d) => `<div>${escapeHtml(d.model)} - ${d.connected ? "connected" : "disconnected"}${d.boundClient ? " - " + escapeHtml(d.boundClient) : ""}</div>`)
+						.join("");
+				}
+			}
+
+			function escapeHtml(value) {
+				return String(value).replace(/[&<>"']/g, (c) => ({
+					"&": "&amp;",
+					"<": "&lt;",
+					">": "&gt;",
+					'"': "&quot;",
+					"'": "&#39;",
+				})[c]);
+			}
+
+			function askSnapshot() {
+				void streamDeckClient.send("sendToPlugin", { kind: "snapshot" });
+			}
+
+			streamDeckClient.sendToPropertyInspector.subscribe((ev) => render(ev.payload));
+			document.getElementById("copy-token").addEventListener("click", async () => {
+				const text = tokenText.textContent.replace("Token: ", "");
+				if (text && text !== "-") {
+					try {
+						await navigator.clipboard.writeText(text);
+					} catch {
+						/* clipboard may be unavailable in the webview; ignore */
+					}
+				}
+			});
+			document.getElementById("refresh").addEventListener("click", askSnapshot);
+			document.getElementById("request-surface").addEventListener("click", () => {
+				void streamDeckClient.send("sendToPlugin", { kind: "requestSurface" });
+			});
+
+			askSnapshot();
+		</script>
+	</body>
+</html>
