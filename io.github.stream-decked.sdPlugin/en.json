@@ -1,5 +1,5 @@
 {
-	"Name": "StreamDecked",
+	"Name": "Deckedout MC",
 	"Description": "Bridges the Minecraft StreamDecked mod to the Stream Deck over a local WebSocket. Place Modspace keys to give the game buttons it can paint and receive presses from.",
 	"io.github.stream-decked.modspace": {
 		"Name": "Modspace",

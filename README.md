@@ -1,9 +1,10 @@
-# StreamDecked
+# Deckedout MC
 
-The Elgato Stream Deck plugin half of StreamDecked.
+The Elgato Stream Deck plugin half of [StreamDecked](https://github.com/Stream-Decked/StreamDecked),
+published to the Stream Deck app as **Deckedout MC**.
 
 It runs inside the Stream Deck app, owns a local WebSocket, and connects a Stream Deck to a
-Minecraft client running the [StreamDecked mod](https://github.com/Stream-Decked/StreamDecked).
+Minecraft client running the StreamDecked mod.
 The plugin sends deck input to the game and pushes the images the game paints back to the keys.
 
 You do not install this by hand. The mod asks the Stream Deck app to install it, along with a

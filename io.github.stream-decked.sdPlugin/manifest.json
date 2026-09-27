@@ -1,5 +1,5 @@
 {
-	"Name": "StreamDecked",
+	"Name": "Deckedout MC",
 	"Version": "0.1.0.0",
 	"Author": "Wolfieboy09",
 	"Actions": [
@@ -28,7 +28,7 @@
 			]
 		}
 	],
-	"Category": "StreamDecked",
+	"Category": "Deckedout MC",
 	"CategoryIcon": "imgs/plugin/category-icon",
 	"CodePath": "bin/plugin.js",
 	"Description": "Bridges the Minecraft StreamDecked mod to the Stream Deck over a local WebSocket. Place Modspace on keys, dials and the touch strip to give the game buttons it can paint and receive input from.",
