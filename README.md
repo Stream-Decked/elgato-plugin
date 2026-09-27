@@ -1,13 +1,17 @@
-# Deckedout MC
+# StreamDeck for Java
 
 The Elgato Stream Deck plugin half of [StreamDecked](https://github.com/Stream-Decked/StreamDecked),
-published to the Stream Deck app as **Deckedout MC**.
+published to the Stream Deck app as **StreamDeck for Java**.
 
-It runs inside the Stream Deck app, owns a local WebSocket, and connects a Stream Deck to a
-Minecraft client running the StreamDecked mod.
-The plugin sends deck input to the game and pushes the images the game paints back to the keys.
+It runs inside the Stream Deck app, owns a local WebSocket, and connects a Stream Deck to a Java
+client on the same machine. The plugin sends deck input to the client and pushes back the images
+the client paints.
 
-You do not install this by hand. The mod asks the Stream Deck app to install it, along with a
+It is not tied to any one game. [SD5J](https://github.com/Stream-Decked/SD5J) is a pure-Java SDK
+that any JVM can embed, and the StreamDecked mod is one such client; anything else that speaks the
+protocol works just as well.
+
+You do not install this by hand. The client asks the Stream Deck app to install it, along with a
 profile called Modspace that takes the deck over.
 
 ## Documentation
@@ -20,12 +24,12 @@ for users.
 ## How it fits together
 
 ```
-Stream Deck  <--WebSocket-->  this plugin  <--WebSocket-->  Minecraft (StreamDecked mod)
+Stream Deck  <--WebSocket-->  this plugin  <--WebSocket-->  any Java client
 ```
 
 Only one Stream Deck app exists per machine and it owns the socket, so the plugin is the server
-and every library embedding, including the mod, connects in as a client. A client is bound to a
-free deck on connect and told which deck it got.
+and every library embedding connects in as a client. A client is bound to a free deck on connect
+and told which deck it got. Several clients can run at once, each on its own deck.
 
 The pair of connections is a loopback-only WebSocket. The plugin writes
 `~/.streamdecked/pairing.json` with a port and a token; the client reads it, sends the token as
@@ -36,20 +40,20 @@ its first frame, and the plugin closes anything that does not match.
 One action, `io.github.stream-decked.modspace`, works on keys, on the dials of a Stream Deck
 + and + XL, and on the touchscreen strip. It is the only action the plugin ships.
 
-- **On a key**: pressing it claims the deck for the game. Once the game has painted buttons, a
-  press forwards that key to the game, and keys the game has no button on also trigger a
+- **On a key**: pressing it claims the deck for the client. Once the client has painted buttons, a
+  press forwards that key to the client, and keys the client has no button on also trigger a
   surface refresh.
 - **On a dial**: push, rotate, and release are forwarded as encoder events.
 - **On the touchscreen**: taps and holds are forwarded with coordinates in whole-strip pixels,
   so `x` already spans every dial on a + XL.
 
-A Modspace key left on your own profile doubles as the way back into Modspace after the game's
-Exit button hands the deck over.
+A Modspace key left on your own profile is the way back into Modspace while a client is running.
 
 ## Requirements
 
 - Stream Deck app 7.1 or newer
-- The StreamDecked mod, Minecraft 1.21.1 on NeoForge
+- A Java client that speaks the protocol, such as Minecraft 1.21.1 on NeoForge with the
+  StreamDecked mod
 - Node.js 20 or newer to build from source
 
 ## Building from source

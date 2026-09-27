@@ -15,8 +15,8 @@ import { ENCODER_STRIP_WIDTH, rowColumnToKey } from "../decks.js";
 import type { InputPayload } from "../protocol.js";
 
 /**
- * A Modspace key is the user's opt-in that a Stream Deck key belongs to a decked
- * Minecraft instance. Pressing one forwards the press to the bound client, which
+ * A Modspace key is the user's opt-in that a Stream Deck key belongs to a bound
+ * client. Pressing one forwards the press to that client, which
  * routes it to whatever button it has on that key; keys the client has no button
  * on also get a fresh surface request.
  *

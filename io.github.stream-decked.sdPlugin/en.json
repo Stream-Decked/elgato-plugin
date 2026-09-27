@@ -1,8 +1,8 @@
 {
-	"Name": "Deckedout MC",
-	"Description": "Bridges the Minecraft StreamDecked mod to the Stream Deck over a local WebSocket. Place Modspace keys to give the game buttons it can paint and receive presses from.",
+	"Name": "StreamDeck for Java",
+	"Description": "Bridges a JVM client to the Stream Deck over a local WebSocket. Place Modspace keys to let a client paint the deck and receive presses, turns and taps.",
 	"io.github.stream-decked.modspace": {
 		"Name": "Modspace",
-		"Tooltip": "Bridge key to the decked Minecraft instance. Pressing it opens the client's surface; painted buttons forward presses to the game."
+		"Tooltip": "Bridge key to the running Java client. Pressing it opens the client's surface; painted buttons forward presses to it."
 	}
 }

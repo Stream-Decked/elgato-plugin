@@ -1,6 +1,6 @@
 /**
  * StreamDecked wire protocol: all frames are JSON objects with a `type` field.
- * The plugin hosts the server; library embeddings (one per Minecraft instance)
+ * The plugin hosts the server; library embeddings, one per running client,
  * connect as clients.
  */
 

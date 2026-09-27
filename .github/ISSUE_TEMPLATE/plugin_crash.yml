@@ -82,7 +82,7 @@ body:
       label: Plugin log
       description: >
         `%APPDATA%\Elgato\StreamDeck\logs` on Windows. Look for lines mentioning
-        "Deckedout MC" or "bridge", and include what surrounds any error.
+        "StreamDeck for Java" or "bridge", and include what surrounds any error.
       render: shell
     validations:
       required: false

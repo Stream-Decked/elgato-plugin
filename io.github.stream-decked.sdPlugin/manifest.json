@@ -1,5 +1,5 @@
 {
-	"Name": "Deckedout MC",
+	"Name": "StreamDeck for Java",
 	"Version": "0.1.0.0",
 	"Author": "Wolfieboy09",
 	"Actions": [
@@ -7,7 +7,7 @@
 			"Name": "Modspace",
 			"UUID": "io.github.stream-decked.modspace",
 			"Icon": "imgs/actions/modspace/icon",
-			"Tooltip": "Bridge to the decked Minecraft instance. Place it on a key, a dial or the touch strip: the client paints the keys and receives every press, turn and tap.",
+			"Tooltip": "Bridge to the running Java client. Place it on a key, a dial or the touch strip: the client paints the keys and receives every press, turn and tap.",
 			"PropertyInspectorPath": "ui/modspace.html",
 			"Controllers": [
 				"Keypad",
@@ -28,10 +28,10 @@
 			]
 		}
 	],
-	"Category": "Deckedout MC",
+	"Category": "StreamDeck for Java",
 	"CategoryIcon": "imgs/plugin/category-icon",
 	"CodePath": "bin/plugin.js",
-	"Description": "Bridges the Minecraft StreamDecked mod to the Stream Deck over a local WebSocket. Place Modspace on keys, dials and the touch strip to give the game buttons it can paint and receive input from.",
+	"Description": "Bridges a JVM client to the Stream Deck over a local WebSocket. Place Modspace on keys, dials and the touch strip to let a client paint the deck and receive presses, turns and taps.",
 	"Icon": "imgs/plugin/marketplace",
 	"SDKVersion": 3,
 	"Software": {
