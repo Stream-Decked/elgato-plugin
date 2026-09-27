@@ -1,7 +1,6 @@
 node_modules/
 
 io.github.stream-decked.sdPlugin/bin/
-io.github.stream-decked.sdPlugin/imgs/
 io.github.stream-decked.sdPlugin/logs/
 
 *.tsbuildinfo
@@ -15,3 +14,5 @@ npm-debug.log*
 Thumbs.db
 
 scripts/
+local/
+dist/

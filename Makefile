@@ -31,8 +31,8 @@ $(PLUGIN)/bin/plugin.js: src/plugin.ts src/bridge.ts src/actions/modspace.ts src
 
 icons: $(PNG_TARGETS)
 
-$(PNG_TARGETS): $(SVG_SOURCES) scripts/generate-icons.mjs
-	"$(NODEJS)" scripts/generate-icons.mjs
+$(PNG_TARGETS): $(SVG_SOURCES) local/generate-icons.mjs
+	"$(NODEJS)" local/generate-icons.mjs
 
 watch:
 	"$(NODEJS)" node_modules/rollup/dist/bin/rollup -c -w

@@ -7,7 +7,9 @@
   "type": "module",
   "scripts": {
     "build": "rollup -c",
-    "watch": "rollup -c -w"
+    "watch": "rollup -c -w",
+    "validate": "streamdeck validate io.github.stream-decked.sdPlugin",
+    "pack": "streamdeck pack io.github.stream-decked.sdPlugin -o dist -f"
   },
   "devDependencies": {
     "@elgato/cli": "^1.7.0",

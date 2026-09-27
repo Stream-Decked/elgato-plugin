@@ -59,28 +59,37 @@ npm run build      # rollup, writes io.github.stream-decked.sdPlugin/bin/plugin.
 npm run watch      # rebuild on change
 ```
 
-The build output is a complete plugin folder, `io.github.stream-decked.sdPlugin/`, with
-`manifest.json`, the bundle, images, and the shipped profile. Copy it to your Stream Deck
-plugins directory to try it:
+The build output is a plugin folder, `io.github.stream-decked.sdPlugin/`, with `manifest.json`,
+the bundle, images, and the shipped profile. `make build` does the same thing if you prefer make.
+
+The images and the profile are committed, so a fresh clone already has everything the manifest
+points at. `imgs/` is generated from `svg/` and `profiles/streamdecked.streamDeckProfile` from the
+Modspace layout, but both generators are kept out of the repository, so if you change an icon or
+the profile layout, regenerate them yourself and commit the result.
+
+### Trying it on your deck
+
+Copy the built folder into the Stream Deck app's plugin directory:
 
 ```
 %APPDATA%\Elgato\StreamDeck\Plugins\io.github.stream-decked.sdPlugin
 ```
 
-The Stream Deck app caches the manifest, the bundle, images, and profiles, so **restart the app**
-after copying. It reloads the plugin on its own, but it will not re-read a profile you replaced
-underneath it.
+Delete the destination folder rather than copying over it, and **restart the app** afterwards. It
+reloads the plugin on its own, but it will not re-read a profile you replaced underneath it, which
+is how you end up with blank keys.
 
-### Other scripts
+### Checking and packaging
 
 ```bash
-node scripts/generate-icons.mjs     # renders the PNGs from svg/ at each size the manifest wants
-python scripts/generate-profile.py   # rebuilds profiles/streamdecked.streamDeckProfile
+npm run validate    # streamdeck validate, checks the manifest
+npm run pack        # streamdeck pack, writes dist/io.github.stream-decked.streamDeckPlugin
 ```
 
-`generate-profile.py` is what fills the Encoder slots in the shipped profile, six of them so a
-+ XL is covered and a deck with no dials simply ignores them. Run both scripts before
-`npm run build` if you change an icon or the profile layout.
+Both take the plugin folder as their argument, so run them from the repository root and let the
+npm script pass the path. Pointing either at the root instead fails with a confusing
+`Name must be in reverse DNS format` error, because it validates the folder you hand it.
+
 
 ### Type checking
 
