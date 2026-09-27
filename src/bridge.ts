@@ -1,5 +1,6 @@
 import { randomBytes } from "node:crypto";
 import streamDeck, { type KeyAction } from "@elgato/streamdeck";
+import type { JsonObject } from "@elgato/utils";
 import { WebSocket, WebSocketServer } from "ws";
 import { DEFAULT_PORT, MODSPACE_PROFILE, MODSPACE_UUID } from "./config.js";
 import { isGeneric, modelNameFor, rowColumnToKey } from "./decks.js";
@@ -54,6 +55,9 @@ type Snapshot = {
 };
 
 const log = streamDeck.logger;
+
+/** A Modspace key as the SDK hands it back, with the SDK's own settings type. */
+type ModspaceAction = KeyAction<JsonObject>;
 
 function parseClientMessage(raw: string): ClientMessage | null {
 	try {
@@ -660,8 +664,8 @@ export class Bridge {
 		return undefined;
 	}
 
-	private modspaceActions(deckId: string): Map<number, KeyAction> {
-		const map = new Map<number, KeyAction>();
+	private modspaceActions(deckId: string): Map<number, ModspaceAction> {
+		const map = new Map<number, ModspaceAction>();
 		const device = streamDeck.devices.getDeviceById(deckId);
 		if (!device) return map;
 		for (const action of device.actions) {
