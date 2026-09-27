@@ -81,6 +81,11 @@ export class Modspace extends SingletonAction {
 		if (!coordinates) return;
 		const device = ev.action.device;
 		const key = rowColumnToKey(coordinates, device.size);
+		if (!bridge.hasBoundClient(device.id)) {
+			// The game is not running, so there is nothing to forward the press to.
+			bridge.leaveModspaceIfIdle(device.id);
+			return;
+		}
 		bridge.ensureModspace(device.id);
 		bridge.press(device.id, key, down);
 	}
@@ -91,6 +96,10 @@ export class Modspace extends SingletonAction {
 		payload: InputPayload,
 	): void {
 		const deckId = ev.action.device.id;
+		if (!bridge.hasBoundClient(deckId)) {
+			bridge.leaveModspaceIfIdle(deckId);
+			return;
+		}
 		bridge.ensureModspace(deckId);
 		bridge.input(deckId, payload);
 	}

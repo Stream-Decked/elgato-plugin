@@ -75,6 +75,9 @@ export class Bridge {
 	private readonly decks = new Map<string, DeckEntry>();
 	/** Decks currently parked on the shipped Modspace profile. */
 	private readonly inModspace = new Set<string>();
+
+	/** In-flight profile switch per deck, awaited by paint work. See {@link switchProfile}. */
+	private readonly switching = new Map<string, Promise<void>>();
 	private wss: WebSocketServer | null = null;
 	private port = DEFAULT_PORT;
 
@@ -115,6 +118,56 @@ export class Bridge {
 		for (const session of this.sessions) {
 			this.requestSurface(session);
 		}
+	}
+
+	/** True while a client is bound to `deckId` and can be sent presses. */
+	hasBoundClient(deckId: string): boolean {
+		return this.sessionForDeck(deckId) !== undefined;
+	}
+
+	/**
+	 * True when `deckId` is currently showing the shipped Modspace profile.
+	 *
+	 * The SDK will not say which profile is active, but `device.actions` always reflects
+	 * whichever one is showing, and the shipped Modspace profile is made up entirely of
+	 * Modspace actions. A full set of them therefore means we are on Modspace, whereas one of
+	 * the user's own profiles only has the keys they chose to place.
+	 *
+	 * This is ground truth, unlike the `inModspace` set, which only records that a client asked
+	 * to enter or leave and is empty whenever the game is closed.
+	 */
+	isShowingModspaceProfile(deckId: string): boolean {
+		const device = streamDeck.devices.getDeviceById(deckId);
+		const size = device?.size;
+		if (!device || !size) return false;
+		const keyCount = size.rows * size.columns;
+		if (keyCount <= 0) return false;
+		return this.modspaceActions(deckId).size >= keyCount;
+	}
+
+	/**
+	 * Handles a Modspace key or encoder being used while no client is bound to `deckId`.
+	 *
+	 * Leaving Modspace is normally driven by the mod, which sends an `exit` frame when the
+	 * in-app Exit key is pressed. With the game closed there is no socket, so that frame can
+	 * never arrive and the deck would be stranded on the Modspace profile. A press is the only
+	 * signal left, so use it to switch back to the previous profile.
+	 *
+	 * Only does this while Modspace is genuinely showing. Switching "to the previous profile"
+	 * is only meaningful from Modspace; issued from one of the user's own profiles it would
+	 * walk the deck further back through their profile history instead of doing nothing.
+	 *
+	 * This deliberately does not go through `ensureModspace`: re-entering Modspace with no
+	 * client to serve it would both do nothing useful and make the Modspace profile the
+	 * deck's own "previous profile", which is what makes a later real exit a no-op.
+	 */
+	leaveModspaceIfIdle(deckId: string): void {
+		if (!this.isShowingModspaceProfile(deckId)) {
+			log.info(`deck ${deckId} is not showing Modspace; ignoring press with no client bound`);
+			return;
+		}
+		log.info(`no client bound for deck ${deckId}; leaving Modspace so the deck is not stranded`);
+		this.exitModspace(deckId);
 	}
 
 	/**
@@ -159,6 +212,10 @@ export class Bridge {
 
 	/** Re-applies the bound client's surface to the Modspace actions on `deckId`. */
 	repaintDeck(deckId: string, page?: number): void {
+		this.afterSwitch(deckId, () => this.paintDeck(deckId, page));
+	}
+
+	private paintDeck(deckId: string, page?: number): void {
 		const session = this.sessionForDeck(deckId);
 		if (!session?.surface) return;
 		if (!this.inModspace.has(deckId)) {
@@ -347,13 +404,7 @@ export class Bridge {
 	 * action instance at the given key on the client's bound deck.
 	 */
 	private paintButton(session: ClientSession, key: number, page: number, title: string | undefined, imageBase64: string | undefined): void {
-		if (session.boundDeckId) {
-			const action = this.modspaceActions(session.boundDeckId).get(key);
-			if (action) {
-				if (title !== undefined) action.setTitle(title).catch((err) => log.warn(`setTitle failed: ${String(err)}`));
-				if (imageBase64 !== undefined) action.setImage(dataUrlFor(imageBase64)).catch((err) => log.warn(`setImage failed: ${String(err)}`));
-			}
-		}
+		// The cached surface is always kept up to date, so a later repaint can restore it.
 		if (session.surface) {
 			const pageSpec = session.surface.pages.find((p) => p.page === page);
 			if (pageSpec) {
@@ -369,6 +420,21 @@ export class Bridge {
 				}
 			}
 		}
+		const deckId = session.boundDeckId;
+		if (!deckId) return;
+		if (!this.inModspace.has(deckId)) {
+			// The deck is on one of the user's own profiles, so this key may be their own
+			// Modspace key rather than one of ours. Painting now would replace the image on it.
+			return;
+		}
+		// Hold the frame until any profile switch in flight has settled, otherwise
+		// device.actions still describes the profile being left and the image lands there.
+		this.afterSwitch(deckId, () => {
+			const action = this.modspaceActions(deckId).get(key);
+			if (!action) return;
+			if (title !== undefined) action.setTitle(title).catch((err) => log.warn(`setTitle failed: ${String(err)}`));
+			if (imageBase64 !== undefined) action.setImage(dataUrlFor(imageBase64)).catch((err) => log.warn(`setImage failed: ${String(err)}`));
+		});
 	}
 
 	// -----------------------------------------------------------------------
@@ -511,20 +577,53 @@ export class Bridge {
 	private enterModspace(deckId: string | null): void {
 		if (!deckId) return;
 		this.inModspace.add(deckId);
-		streamDeck.profiles
-			.switchToProfile(deckId, MODSPACE_PROFILE)
-			.catch((err) => {
-				this.inModspace.delete(deckId);
-				log.warn(`could not enter Modspace on ${deckId}: ${String(err)}`);
-			});
+		this.switchProfile(deckId, MODSPACE_PROFILE).catch((err) => {
+			this.inModspace.delete(deckId);
+			log.warn(`could not enter Modspace on ${deckId}: ${String(err)}`);
+		});
 	}
 
 	/** Restores the deck's previous profile, leaving Modspace. */
 	private exitModspace(deckId: string): void {
 		this.inModspace.delete(deckId);
-		streamDeck.profiles
-			.switchToProfile(deckId)
-			.catch((err) => log.warn(`could not leave Modspace on ${deckId}: ${String(err)}`));
+		this.switchProfile(deckId).catch((err) => log.warn(`could not leave Modspace on ${deckId}: ${String(err)}`));
+	}
+
+	/**
+	 * Serialises profile switches per deck and remembers the in-flight one.
+	 *
+	 * `switchToProfile` is asynchronous, and until it settles `device.actions` still describes
+	 * the profile the deck is leaving. Painting in that window stamps the Modspace images onto
+	 * the user's own profile and leaves Modspace blank, so paint work is held until the switch
+	 * this deck is waiting on has finished.
+	 */
+	private switchProfile(deckId: string, profile?: string): Promise<void> {
+		const next = (this.switching.get(deckId) ?? Promise.resolve())
+			.catch(() => undefined)
+			.then(() => streamDeck.profiles.switchToProfile(deckId, profile))
+			.finally(() => {
+				// Only clear our own entry; a later switch may already have replaced it.
+				if (this.switching.get(deckId) === next) this.switching.delete(deckId);
+			});
+		this.switching.set(deckId, next);
+		return next;
+	}
+
+	/**
+	 * Runs `work` once any profile switch in flight on `deckId` has settled, so that it sees
+	 * the actions of the profile that will actually be showing. Runs immediately if the deck is
+	 * not switching, and still runs if the switch failed.
+	 */
+	private afterSwitch(deckId: string, work: () => void): void {
+		const pending = this.switching.get(deckId);
+		if (!pending) {
+			work();
+			return;
+		}
+		// `work` runs exactly once: on fulfilment, or on rejection so a failed switch does
+		// not strand the deck's display. The trailing catch keeps a throw inside `work`
+		// from becoming an unhandled rejection, without re-running it.
+		pending.then(work, work).catch((err) => log.warn(`deferred paint on ${deckId} failed: ${String(err)}`));
 	}
 
 	/** True while `deckId` is parked on the Modspace profile. */

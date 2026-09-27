@@ -13,6 +13,8 @@ PNG_TARGETS := \
 	$(PLUGIN)/imgs/actions/modspace/icon@2x.png \
 	$(PLUGIN)/imgs/actions/modspace/key.png \
 	$(PLUGIN)/imgs/actions/modspace/key@2x.png \
+	$(PLUGIN)/imgs/actions/modspace/encoder-icon.png \
+	$(PLUGIN)/imgs/actions/modspace/encoder-icon@2x.png \
 	$(PLUGIN)/imgs/plugin/category-icon.png \
 	$(PLUGIN)/imgs/plugin/category-icon@2x.png \
 	$(PLUGIN)/imgs/plugin/marketplace.png \
@@ -29,8 +31,8 @@ $(PLUGIN)/bin/plugin.js: src/plugin.ts src/bridge.ts src/actions/modspace.ts src
 
 icons: $(PNG_TARGETS)
 
-$(PNG_TARGETS): $(SVG_SOURCES) generate-icons.mjs
-	"$(NODEJS)" generate-icons.mjs
+$(PNG_TARGETS): $(SVG_SOURCES) scripts/generate-icons.mjs
+	"$(NODEJS)" scripts/generate-icons.mjs
 
 watch:
 	"$(NODEJS)" node_modules/rollup/dist/bin/rollup -c -w

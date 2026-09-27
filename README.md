@@ -74,7 +74,7 @@ underneath it.
 ### Other scripts
 
 ```bash
-node generate-icons.mjs          # renders the PNGs from svg/ at each size the manifest wants
+node scripts/generate-icons.mjs     # renders the PNGs from svg/ at each size the manifest wants
 python scripts/generate-profile.py   # rebuilds profiles/streamdecked.streamDeckProfile
 ```
 
