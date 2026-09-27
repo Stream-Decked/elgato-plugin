@@ -1,6 +1,6 @@
 NODEJS := /mnt/c/Program Files/nodejs/node.exe
 
-PLUGIN := dev.wolfieboy09.deckedoutmc.sdPlugin
+PLUGIN := io.github.stream-decked.sdPlugin
 
 SVG_SOURCES := \
 	svg/actions/modspace/icon.svg \

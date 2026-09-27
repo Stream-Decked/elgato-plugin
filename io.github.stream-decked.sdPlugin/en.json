@@ -1,7 +1,7 @@
 {
-	"Name": "DeckedOut MC",
+	"Name": "StreamDecked",
 	"Description": "Bridges the Minecraft StreamDecked mod to the Stream Deck over a local WebSocket. Place Modspace keys to give the game buttons it can paint and receive presses from.",
-	"dev.wolfieboy09.deckedoutmc.modspace": {
+	"io.github.stream-decked.modspace": {
 		"Name": "Modspace",
 		"Tooltip": "Bridge key to the decked Minecraft instance. Pressing it opens the client's surface; painted buttons forward presses to the game."
 	}

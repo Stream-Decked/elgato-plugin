@@ -3,7 +3,7 @@
  */
 
 /** UUID of the Modspace action, also referenced in `manifest.json`. */
-export const MODSPACE_UUID = "dev.wolfieboy09.deckedoutmc.modspace";
+export const MODSPACE_UUID = "io.github.stream-decked.modspace";
 
 /** Fixed default port the local bridge listens on. Changeable from the property inspector. */
 export const DEFAULT_PORT = 8126;

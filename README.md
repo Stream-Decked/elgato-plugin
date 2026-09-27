@@ -1,4 +1,4 @@
-# DeckedOut MC
+# StreamDecked
 
 The Elgato Stream Deck plugin half of StreamDecked.
 
@@ -32,7 +32,7 @@ its first frame, and the plugin closes anything that does not match.
 
 ## The Modspace action
 
-One action, `dev.wolfieboy09.deckedoutmc.modspace`, works on keys, on the dials of a Stream Deck
+One action, `io.github.stream-decked.modspace`, works on keys, on the dials of a Stream Deck
 + and + XL, and on the touchscreen strip. It is the only action the plugin ships.
 
 - **On a key**: pressing it claims the deck for the game. Once the game has painted buttons, a
@@ -55,16 +55,16 @@ Exit button hands the deck over.
 
 ```bash
 npm install
-npm run build      # rollup, writes dev.wolfieboy09.deckedoutmc.sdPlugin/bin/plugin.js
+npm run build      # rollup, writes io.github.stream-decked.sdPlugin/bin/plugin.js
 npm run watch      # rebuild on change
 ```
 
-The build output is a complete plugin folder, `dev.wolfieboy09.deckedoutmc.sdPlugin/`, with
+The build output is a complete plugin folder, `io.github.stream-decked.sdPlugin/`, with
 `manifest.json`, the bundle, images, and the shipped profile. Copy it to your Stream Deck
 plugins directory to try it:
 
 ```
-%APPDATA%\Elgato\StreamDeck\Plugins\dev.wolfieboy09.deckedoutmc.sdPlugin
+%APPDATA%\Elgato\StreamDeck\Plugins\io.github.stream-decked.sdPlugin
 ```
 
 The Stream Deck app caches the manifest, the bundle, images, and profiles, so **restart the app**

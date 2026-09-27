@@ -258,7 +258,7 @@ export class Bridge {
 		return new Promise((resolve) => {
 			const wss = new WebSocketServer({ host: "127.0.0.1", port: this.port }, () => {
 				this.wss = wss;
-				log.info(`DeckedOut MC bridge listening on 127.0.0.1:${this.port}`);
+				log.info(`StreamDecked bridge listening on 127.0.0.1:${this.port}`);
 				writePairingFile(this.port, this.token).catch((err) =>
 					log.error(`could not write pairing file: ${String(err)}`)
 				);

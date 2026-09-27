@@ -6,7 +6,7 @@ import path from "node:path";
 import url from "node:url";
 
 const isWatching = !!process.env.ROLLUP_WATCH;
-const sdPlugin = "dev.wolfieboy09.deckedoutmc.sdPlugin";
+const sdPlugin = "io.github.stream-decked.sdPlugin";
 
 /**
  * @type {import('rollup').RollupOptions}

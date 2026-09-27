@@ -1,8 +1,8 @@
 node_modules/
 
-dev.wolfieboy09.deckedoutmc.sdPlugin/bin/
-dev.wolfieboy09.deckedoutmc.sdPlugin/imgs/
-dev.wolfieboy09.deckedoutmc.sdPlugin/logs/
+io.github.stream-decked.sdPlugin/bin/
+io.github.stream-decked.sdPlugin/imgs/
+io.github.stream-decked.sdPlugin/logs/
 
 *.tsbuildinfo
 

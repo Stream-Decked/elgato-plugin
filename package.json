@@ -1,6 +1,6 @@
 {
-  "name": "deckedout-mc",
-  "displayName": "DeckedOut MC",
+  "name": "stream-decked",
+  "displayName": "StreamDecked",
   "version": "0.1.0",
   "description": "Bridges the Minecraft StreamDecked mod to the Stream Deck app over a local WebSocket.",
   "private": true,

@@ -1,11 +1,11 @@
 {
-	"Name": "DeckedOut MC",
+	"Name": "StreamDecked",
 	"Version": "0.1.0.0",
 	"Author": "Wolfieboy09",
 	"Actions": [
 		{
 			"Name": "Modspace",
-			"UUID": "dev.wolfieboy09.deckedoutmc.modspace",
+			"UUID": "io.github.stream-decked.modspace",
 			"Icon": "imgs/actions/modspace/icon",
 			"Tooltip": "Bridge to the decked Minecraft instance. Place it on a key, a dial or the touch strip: the client paints the keys and receives every press, turn and tap.",
 			"PropertyInspectorPath": "ui/modspace.html",
@@ -67,5 +67,5 @@
 			"AutoInstall": false
 		}
 	],
-	"UUID": "dev.wolfieboy09.deckedoutmc"
+	"UUID": "io.github.stream-decked"
 }
