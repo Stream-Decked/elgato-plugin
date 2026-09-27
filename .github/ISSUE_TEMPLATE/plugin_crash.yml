@@ -1,0 +1,98 @@
+name: Plugin crash or blank deck
+description: The plugin stopped working, the deck is blank, or nothing happens on press.
+title: "[Plugin]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    value: |
+      The Stream Deck app runs plugins in its own process and often swallows the error, so a
+      failure here looks like "nothing happens" rather than a visible crash. The log is the
+      fastest route to the cause, so please include it.
+
+  - type: input
+    id: app-version
+    attributes:
+      label: Stream Deck app version
+      description: Stream Deck, then Settings, then About.
+      placeholder: "7.6.0.23012"
+    validations:
+      required: true
+
+  - type: input
+    id: plugin-version
+    attributes:
+      label: Plugin version
+      description: The `Version` field in `manifest.json`, or the version shown in the app.
+      placeholder: "0.1.0.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Windows
+        - macOS
+        - Linux
+    validations:
+      required: true
+
+  - type: dropdown
+    id: deck
+    attributes:
+      label: Stream Deck model
+      options:
+        - Stream Deck (original)
+        - Stream Deck Mini
+        - Stream Deck MK.2
+        - Stream Deck +
+        - Stream Deck XL
+        - Stream Deck Neo
+        - Not a Stream Deck / virtual
+    validations:
+      required: true
+
+  - type: dropdown
+    id: symptom
+    attributes:
+      label: What is the symptom?
+      options:
+        - Deck keys are blank or show no icon
+        - The plugin does not appear in the app at all
+        - Pressing a key does nothing
+        - The deck will not leave Modspace
+        - The game connects but paints nothing
+        - The plugin log shows an error
+        - Something else
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: What you did, and what you expected instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: log
+    attributes:
+      label: Plugin log
+      description: >
+        `%APPDATA%\Elgato\StreamDeck\logs` on Windows. Look for lines mentioning
+        "Deckedout MC" or "bridge", and include what surrounds any error.
+      render: shell
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I restarted the Stream Deck app after installing or updating the plugin.
+          required: false
+        - label: I deleted the old plugin folder rather than copying over it.
+          required: false

@@ -8,8 +8,10 @@
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -c -w",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
     "validate": "streamdeck validate io.github.stream-decked.sdPlugin",
-    "pack": "streamdeck pack io.github.stream-decked.sdPlugin -o dist -f"
+    "pack": "streamdeck pack io.github.stream-decked.sdPlugin -o dist -f",
+    "verify": "npm run typecheck && npm run validate && npm run build && npm run pack"
   },
   "devDependencies": {
     "@elgato/cli": "^1.7.0",

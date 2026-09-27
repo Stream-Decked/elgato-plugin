@@ -1,0 +1,64 @@
+name: Bug report
+description: The plugin does something other than what it is documented to do.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    value: |
+      For crashes, blank keys, or a deck that will not leave Modspace, use the
+      "Plugin crash or blank deck" template instead. It asks for the log, which is usually
+      what settles these.
+
+  - type: input
+    id: plugin-version
+    attributes:
+      label: Plugin version
+      placeholder: "0.1.0.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: deck
+    attributes:
+      label: Stream Deck model
+      options:
+        - Stream Deck (original)
+        - Stream Deck Mini
+        - Stream Deck MK.2
+        - Stream Deck +
+        - Stream Deck XL
+        - Stream Deck Neo
+        - Not a Stream Deck / virtual
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I checked this against the latest published plugin version.
+          required: false
+        - label: This is not about a mod that draws on the deck.
+          required: false

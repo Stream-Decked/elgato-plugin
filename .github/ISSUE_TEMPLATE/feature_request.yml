@@ -1,0 +1,33 @@
+name: Feature request
+description: Ask for something new in the Stream Deck plugin.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: The goal rather than the API. What does the deck need to be able to do?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Which part of the plugin?
+      options:
+        - Modspace profile and takeover
+        - Modspace action, keys, dials or touchscreen
+        - Connection and pairing with the game
+        - Property inspector
+        - Packaging and publishing
+        - Not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What have you tried instead?
+    validations:
+      required: false
