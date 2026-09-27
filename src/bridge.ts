@@ -217,15 +217,7 @@ export class Bridge {
 
 	private paintDeck(deckId: string, page?: number): void {
 		const session = this.sessionForDeck(deckId);
-		if (!session?.surface) return;
-		if (!this.isShowingModspaceProfile(deckId)) {
-			// The deck is on one of the user's own profiles. Painting here would stamp our
-			// button images over their own Modspace keys, so leave the profile alone and wait
-			// for a key press to call ensureModspace. This asks the device rather than trusting
-			// `inModspace`: the user can switch profiles from the app, which no frame tells us
-			// about, and a stale `inModspace` would have us paint over their own keys.
-			return;
-		}
+		if (!session?.surface || !this.isShowingModspaceProfile(deckId)) return;
 		const actions = this.modspaceActions(deckId);
 		let applied = 0;
 		let total = 0;
@@ -423,12 +415,7 @@ export class Bridge {
 			}
 		}
 		const deckId = session.boundDeckId;
-		if (!deckId) return;
-		if (!this.isShowingModspaceProfile(deckId)) {
-			// The deck is on one of the user's own profiles, so this key may be their own
-			// Modspace key rather than one of ours. Painting now would replace the image on it.
-			return;
-		}
+		if (!deckId || !this.isShowingModspaceProfile(deckId)) return;
 		// Hold the frame until any profile switch in flight has settled, otherwise
 		// device.actions still describes the profile being left and the image lands there.
 		this.afterSwitch(deckId, () => {

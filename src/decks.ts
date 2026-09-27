@@ -30,6 +30,8 @@ export function keyToRowColumn(key: number, size: DeckSize): RowColumn {
 	return { row: Math.floor(key / size.columns), column: key % size.columns };
 }
 
+//TODO - Maybe don't hardcode types and model sizes
+//These are what is currently supported though and some others
 const MODELS_BY_TYPE: Readonly<Record<string, string>> = {
 	"0": "Stream Deck",
 	"1": "Stream Deck Mini",
