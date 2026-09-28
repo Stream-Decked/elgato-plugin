@@ -1,7 +1,7 @@
 {
   "name": "stream-decked",
   "displayName": "StreamDeck for Java",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Bridges a JVM client to the Stream Deck app over a local WebSocket.",
   "private": true,
   "type": "module",
