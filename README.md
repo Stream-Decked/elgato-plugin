@@ -32,7 +32,7 @@ and every library embedding connects in as a client. A client is bound to a free
 and told which deck it got. Several clients can run at once, each on its own deck.
 
 The pair of connections is a loopback-only WebSocket. The plugin writes
-`~/.streamdecked/pairing.json` with a port and a token; the client reads it, sends the token as
+`~/.config/streamdecked/pairing.json` with a port and a token; the client reads it, sends the token as
 its first frame, and the plugin closes anything that does not match.
 
 ## The Modspace action

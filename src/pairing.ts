@@ -3,7 +3,7 @@ import * as os from "node:os";
 import * as path from "node:path";
 
 /** Where clients look for the port and handshake token. */
-export const PAIRING_PATH = path.join(os.homedir(), ".streamdecked", "pairing.json");
+export const PAIRING_PATH = path.join(os.homedir(), ".config", "streamdecked", "pairing.json");
 
 /**
  * Writes the pairing file the library clients read before connecting. Mode 600
